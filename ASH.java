@@ -535,9 +535,29 @@ public class ASH{
 	*/
 	String[] coms = splitArgument(command);
 	try{
-	    Command action = commandTable.get(coms[0]);
+	    boolean inverse = false;
+	    Command action = null;
+	    try{
+		action = commandTable.get(coms[0]);
+		action.getName();
+	    } catch(Exception error6){
+		action = null;
+	    }
+	    // if the command didn't work, try to swap the first two words: e.g., new frame -> frame new
 	    if(action == null){
-		throw new Exception();
+		try{
+		    action = commandTable.get(coms[1]);
+		    action.getName();
+		} catch(Exception error7){
+		    action = null;
+		}
+		if(action == null){
+		    throw new Exception();
+		}
+		inverse = true;
+		String tempcom = coms[0];
+		coms[0] = coms[1];
+		coms[1] = tempcom;
 	    }
 	    String[] args = new String[coms.length-1];
 	    for(int a=0; a<args.length; a++){
@@ -546,12 +566,13 @@ public class ASH{
 	    try{
 		action.execute(args);
 	    } catch(Exception error){
-		    printMessage("Invalid call for "+coms[0]+". Syntax for the command is:\n"+action.getUsage(),
-				 "Invalid command while executing script: '"+command+"'");
+		printMessage("Invalid call for "+coms[0]+". Syntax for the command is:\n"+action.getUsage(),
+			     "Invalid command while executing script: '"+command+"'");		
 		//error.printStackTrace();
 	    }
 	    return;
-	} catch(Exception error2){ 
+	} catch(Exception error2){
+	    //error2.printStackTrace();
 	    // check for alias
 	    Alias shorthand = null;
 	    try{
@@ -573,6 +594,7 @@ public class ASH{
 		    //error3.printStackTrace();
 		}
 	    } catch(Exception error4){
+		//error4.printStackTrace();
 		/*
 		try{ // Try to execute a unix command
 		    Process p = Runtime.getRuntime().exec(coms, null, FileHandler.CWD);
@@ -596,7 +618,7 @@ public class ASH{
 		} catch(Exception error5){
 		*/
 
-		if(coms[0].length() > 0){
+		if(coms[0].length() > 0){		    
 		    printMessage("unknown command "+coms[0],
 				 "Invalid command while executing script: '"+command+"'");
 		}
@@ -1992,7 +2014,7 @@ public class ASH{
 		printMessage(com+" is an alias for '"+alias.getCommand(args)+"'",true);
 	    } catch(Exception error2){
 		if(com.length() > 0){
-		    printMessage("unknown command "+com,true);
+		    printMessage("an unknown command "+com,true);
 		}
 	    }
 	}	
