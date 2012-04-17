@@ -16,6 +16,7 @@ public class FileHandler{
     public static final int F_POSCAR = 2;
     public static final int F_SCRIPT = 3;
     public static final int F_POSCAR4 = 4;
+    public static final int F_ASE = 5;
 
     public static final int F_PNG = -1;
     public static final int F_JPG = -2;
@@ -272,6 +273,76 @@ public class FileHandler{
 
 	return data;
 	
+    }
+
+    public String[] formatASE(Structure geo){
+	int nAtoms = geo.countAllAtoms();
+	String[] lines = new String[15+2*nAtoms];
+	lines[0] = "#! /usr/bin/env python";
+	lines[1] = "import ase";
+	lines[2] = "coordinates = [ \\";
+	lines[3+nAtoms] = "symbols = [ \\";
+
+	Atom[] all = geo.getAllAtoms();
+	for(int i=0; i<nAtoms; i++){
+	    lines[3+i] = "  [ ";
+ 	    for(int j=0; j<3; j++){
+		lines[3+i] += formattedDouble(all[i].getCoordinates().element(j),DECIMALS+9,DECIMALS);
+		if(j < 2){
+		    lines[3+i] += ", ";
+		} else {
+		    lines[4+i+nAtoms] = "  '" + all[i].getName() + "'";
+		    if(i < nAtoms-1){
+			lines[3+i] += " ], \\";
+			lines[4+i+nAtoms] += ", \\";
+		    } else {
+			lines[3+i] += " ] ] ";
+			lines[4+i+nAtoms] += " ] ";
+		    }
+		}
+	    }	    
+	}
+
+	lines[4+2*nAtoms] = "cell = [ \\";
+	for(int i=0; i<3; i++){
+	    lines[5+i+2*nAtoms] = "   [ ";
+	    for(int j=0; j<3; j++){
+		lines[5+i+2*nAtoms] += formattedDouble(geo.getCell()[i].element(j),DECIMALS+9,DECIMALS);
+		if(j < 2){
+		    lines[5+i+2*nAtoms] += ", ";		
+		} else {
+		    lines[5+i+2*nAtoms] += " ]";
+		}
+	    }
+	    if(i < 2){
+		lines[5+i+2*nAtoms] += ", \\";		
+	    } else {
+		lines[5+i+2*nAtoms] += " ] ";
+	    }
+	}
+
+	lines[8+2*nAtoms] = "pbc = [ ";
+	for(int i=0; i<3; i++){
+	    if(geo.getBoundaryConditions()[i]){
+		lines[8+2*nAtoms] += "True";
+	    } else {
+		lines[8+2*nAtoms] += "False";
+	    }
+	    if(i < 2){
+		lines[8+2*nAtoms] += ", ";		
+	    } else {
+		lines[8+2*nAtoms] += " ] ";
+	    }
+	}
+
+	lines[9+2*nAtoms] = "def system(use_symbols=True):";
+	lines[10+2*nAtoms] = "  global coordinates, symbols";
+	lines[11+2*nAtoms] = "  if use_symbols:";
+	lines[12+2*nAtoms] = "    return ase.Atoms(symbols=symbols,positions=coordinates,cell=cell,pbc=pbc)";
+	lines[13+2*nAtoms] = "  else:";
+	lines[14+2*nAtoms] = "    return ase.Atoms(numbers=[1]*"+nAtoms+",positions=coordinates,cell=cell,pbc=pbc)";
+	
+	return lines;
     }
 
     public String[] formatXYZ(Structure geo){

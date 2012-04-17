@@ -69,6 +69,7 @@ public class ASH{
     public static final String C_POSCAR = "poscar";
     public static final String C_POSCAR4 = "poscar4";
     public static final String C_PNG = "png";
+    public static final String C_ASE = "ase";
     public static final String C_SCRIPT = "script";
     public static final String C_SET = "define";
     public static final String C_DEFAULT = "default";
@@ -1383,7 +1384,10 @@ public class ASH{
 	    io.writeFile(lines,filename);	    
 	} else if(format == FileHandler.F_XYZ){
 	    lines = io.formatXYZ(geo);
-	    io.writeFile(lines,filename);   
+	    io.writeFile(lines,filename);   	    
+	} else if(format == FileHandler.F_ASE){
+	    lines = io.formatASE(geo);
+	    io.writeFile(lines,filename); 
 	} else if(format == FileHandler.F_PNG){
 	    BufferedImage graph = this.painter.getPainting();
 	    io.writeFile(graph,filename,format);
@@ -3927,7 +3931,7 @@ public class ASH{
 	    cOptions = new String[2][];
 	    String[] opt0 = {C_NOOPTION,C_ALL};
 	    cOptions[0] = opt0;
-	    String[] opt1 = {C_POSCAR,C_POSCAR4,C_XYZ,C_PNG};
+	    String[] opt1 = {C_POSCAR,C_POSCAR4,C_XYZ,C_PNG,C_ALL};
 	    cOptions[1] = opt1;
 	    cArgs = "(filename)  [ (type1) (type2) ... ]";
 	    cInstructions = "Writes data to a file. This may mean writing the coordinates of the geometry in a text file or rendering an image of the current view. For data files, the poscar and xyz formats are currently implemented. Note that when the names of elements are written, if the name of the element contains the character '"+FileHandler.ELEM_SEP+"', it and anything following will be ignored when writing (e.g., 'Mg', 'Mg_2', and 'Mg_frozen' are all written as 'Mg'). This is done to allow the user to define groups of atoms which correspond to the same element but are handled separately in ASH. If you want the names of the groups to be different in the output as well, use some other delimiter (e.g., Mg2 or Mg.2). \n"+
@@ -3936,6 +3940,7 @@ public class ASH{
 		INSET+INSET+C_POSCAR+" (filename) [(type1) (type2) ...] - Writes the geometry in POSCAR format used by VASP 5. By default, elements are listed in order of atomic numbers. By giving a list of element symbols, e.g., Mg O Si, the user can force the order of the elements in the written file.\n"+
 		INSET+INSET+C_POSCAR4+" (filename) [(type1) (type2) ...] - Writes the geometry in POSCAR format used by VASP 4. By default, elements are listed in order of atomic numbers. By giving a list of element symbols, e.g., Mg O Si, the user can force the order of the elements in the written file.\n"+
 		INSET+INSET+C_XYZ+" (filename) - Writes the geometry in xyz format.\n"+
+		INSET+INSET+C_ASE+" (filename) - Writes the geometry as an ASE Python script.\n"+
 		INSET+INSET+C_PNG+" (filename) - Writes the geometry in png format as an image.";
 	}
 	protected void execute(String[] args)
@@ -4045,6 +4050,28 @@ public class ASH{
 			printMessage("could not write to "+fileout,true);
 			//error.printStackTrace();
 		    }
+		} else if(args[delta].equalsIgnoreCase(C_ASE)){
+		    String filename = args[1+delta];
+		    int namelength = filename.length();
+		    String fileout = filename;
+		    if(!filename.substring(namelength-4,namelength).equalsIgnoreCase(".py")){
+			fileout = filename+".py";
+		    }
+		    try{
+			if(writeAll){
+			    Structure[] geos = new Structure[frames.size()];
+			    for(int i=0; i<geos.length; i++){
+				geos[i] = frames.get(i);
+			    }
+			    writeGeometries(fileout,geos,FileHandler.F_ASE);
+			} else {
+			    writeGeometry(fileout,frames.get(currentFrame),FileHandler.F_ASE,null);
+			}
+			printMessage("wrote "+fileout);
+		    } catch(Exception error){
+			printMessage("could not write to "+fileout,true);
+			//error.printStackTrace();
+		    }		    
 		} else if(args[delta].equalsIgnoreCase(C_XYZ)){	    
 		    String filename = args[1+delta];
 		    int namelength = filename.length();
