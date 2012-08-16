@@ -217,8 +217,13 @@ public class GeoWindow extends JFrame{
 	    if (e.getKeyCode() == KeyEvent.VK_P) {
 		this.window.getPainter().pressPrevious();
 	    }
+	    if (e.getKeyCode() == KeyEvent.VK_S) {
+		this.window.getPainter().pressShift(((GeoPainter)this.window.getPainter()).getManager());
+	    }
+	    if (e.getKeyCode() == KeyEvent.VK_R) {
+		this.window.getPainter().pressRotate(((GeoPainter)this.window.getPainter()).getManager());
+	    }
 
-	    
 	} 
 	
 	/**
@@ -244,6 +249,12 @@ public class GeoWindow extends JFrame{
 	    }
 	    if (e.getKeyCode() == KeyEvent.VK_P) {
 		this.window.getPainter().releasePrevious();
+	    }
+	    if (e.getKeyCode() == KeyEvent.VK_S) {
+		this.window.getPainter().releaseShift();
+	    }
+	    if (e.getKeyCode() == KeyEvent.VK_R) {
+		this.window.getPainter().releaseRotate();
 	    }
 
 	}

@@ -50,6 +50,10 @@ public class GeoPainter extends Painter{
 	this.lookout = look;
     }
 
+    public ASH getManager(){
+	return this.manager;
+    }
+
     public Structure getGeometry(){
 	return this.geometry;
     }
@@ -127,12 +131,47 @@ public class GeoPainter extends Painter{
 	}
 	if(mousePressed){
 	    if((dragX-dragStartX) != 0 || (dragY-dragStartY) != 0){
-		try{
-		    lookout.rotateViewPoint((double)(dragX-dragStartX)*-0.01,(double)(dragY-dragStartY)*0.01,geometry.getCenter());
+		if(shiftPressed){
+
+		    int natoms = geometry.countParticles();
+		    Vector side = lookout.getSide();
+		    Vector up = lookout.getUp();
+		    Vector shift = side.times(0.1*(dragX-dragStartX)).plus(up.times(-0.1*(dragY-dragStartY)));
+		    for(int i=0; i<natoms; i++){
+			if(geometry.getParticle(i).isPicked()){
+			    geometry.getParticle(i).shiftCoordinates(shift);
+			}
+		    }
+		    geometry.forcePeriodicBounds();
 		    updateGeo();
 		    dragStartX = dragX;
 		    dragStartY = dragY;
-		} catch(Exception error){
+
+		} else if(rotPressed) {
+
+		    int natoms = geometry.countParticles();
+		    Vector side = lookout.getSide();
+		    Vector up = lookout.getUp();
+		    Quaternion rotator1 = new Quaternion(up,  0.01*(dragX-dragStartX));
+		    Quaternion rotator2 = new Quaternion(side,0.01*(dragY-dragStartY));
+		    Quaternion rotator = rotator1.times(rotator2);
+		    for(int i=0; i<natoms; i++){
+			if(geometry.getParticle(i).isPicked()){
+			    geometry.getParticle(i).rotate(rotator);
+			}
+		    }
+		    updateGeo();
+		    dragStartX = dragX;
+		    dragStartY = dragY;
+
+		} else {
+		    try{
+			lookout.rotateViewPoint((double)(dragX-dragStartX)*-0.01,(double)(dragY-dragStartY)*0.01,geometry.getCenter());
+			updateGeo();
+			dragStartX = dragX;
+			dragStartY = dragY;
+		    } catch(Exception error){
+		    }
 		}
 	    }
 	}

@@ -10,6 +10,8 @@ public abstract class Painter extends Canvas{
     protected boolean downPressed;
     protected boolean nextPressed;
     protected boolean prevPressed;
+    protected boolean shiftPressed;
+    protected boolean rotPressed;
     protected boolean mousePressed;
     protected int wheelClicks = 0;
 
@@ -55,6 +57,16 @@ public abstract class Painter extends Canvas{
     public void pressPrevious(){
 	prevPressed = true;
     };
+    public void pressShift(ASH system){
+	System.out.println("Mouse shift mode on.");
+	shiftPressed = true;
+	system.rememberStructure();
+    };
+    public void pressRotate(ASH system){
+	System.out.println("Mouse rotate mode on.");
+	system.rememberStructure();
+	rotPressed = true;
+    };
 
     public void releaseLeft(){
 	leftPressed = false;
@@ -70,9 +82,17 @@ public abstract class Painter extends Canvas{
     }
     public void releaseNext(){
 	nextPressed = false;
-    };
+    }
     public void releasePrevious(){
 	prevPressed = false;
+    }
+    public void releaseShift(){
+	System.out.println("Mouse shift mode off.");
+	shiftPressed = false;
+    };
+    public void releaseRotate(){
+	System.out.println("Mouse rotate mode off.");
+	rotPressed = false;
     };
 
     public void mousePressed(int x, int y){
@@ -107,6 +127,8 @@ public abstract class Painter extends Canvas{
 	   mousePressed ||
 	   nextPressed ||
 	   prevPressed ||
+	   shiftPressed ||
+	   rotPressed ||
 	   wheelClicks != 0){
 	    return true;
 	} else {
