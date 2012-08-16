@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ash : Atomic structure handler is a utility program for building atomic structures and visualizing them. It is primarily meant for constructing systems for atomistic simulations." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ash</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/thynnine/Ash">View on GitHub</a>
+
+          <h1 id="project_title">Ash</h1>
+          <h2 id="project_tagline">Atomic structure handler is a utility program for building atomic structures and visualizing them. It is primarily meant for constructing systems for atomistic simulations.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/thynnine/Ash/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/thynnine/Ash/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>ASH (Atomic Structure Handler) is a utility for creating and modifying atomic structures and visualizing the built geometries as you go. It is mainly meant for constructing systems for simulations.</p>
+
+<h2>Dependencies</h2>
+
+<p>The program is written in Java 1.6. It uses the jline package by Marc Prud'hommeaux for emulating a shell. You can get jline at <a href="http://jline.sourceforge.net/">http://jline.sourceforge.net/</a> . To run the ash.jar program, type "java -jar ash.jar" in the command prompt while in the directory where you have the package.</p>
+
+<h2>Usage</h2>
+
+<p>The user can operate on the structures via the command line, and the window displaying the structure should update automatically when required. Commands include operations such as 'shift', 'rotate', 'scale', etc. Currently the program recognizes about 30 different commands. There is no real manual, but to view a list of available commands, type "list command" within the program. (You could also just hit tab and see what commands the completor suggests.) A short description of the syntax of each command can be seen by typing "man X" where X is the name of a command.</p>
+
+<p>The viewpoint can be adjusted by dragging with the mouse over the graphical window, or by pressing the arrow keys. Pressing and holding the 's' key actives mouse shift mode, where atoms can be moved by dragging with the mouse. Likewise holding 'r' activates mouse rotate mode, where clusters (not atoms!) can be rotated in place by dragging.
+The commands 'mouse info' and 'mouse pick' also activate mouse features.</p>
+
+<p>Frames can be browsed using the 'n' and 'p' keys (next and previous, respectively). </p>
+
+<p>The program can be scripted. A script is read using the command "open script X" where X is a file containing the script. In addition to all the normal commands the program recognizes, scripts may also contain "if-else" and "while" logic structures. For instance:</p>
+
+<pre><code>define nx 0
+while nx &lt; 10
+  define nx nx+1
+  print nx
+endwhile
+</code></pre>
+
+<h2>Formats</h2>
+
+<p>Currently, the program can only read and write the XYZ format and the POSCAR format used by VASP. It can also write a Python script which can be read in ASE. I'll add support for other formats later.</p>
+
+<h2>Contact</h2>
+
+<p>Please report bugs to tjhynnin at gmail.com.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ash maintained by <a href="https://github.com/thynnine">thynnine</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
