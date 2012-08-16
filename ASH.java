@@ -3931,7 +3931,7 @@ public class ASH{
 	    cOptions = new String[2][];
 	    String[] opt0 = {C_NOOPTION,C_ALL};
 	    cOptions[0] = opt0;
-	    String[] opt1 = {C_POSCAR,C_POSCAR4,C_XYZ,C_PNG,C_ALL};
+	    String[] opt1 = {C_POSCAR,C_POSCAR4,C_XYZ,C_PNG,C_ASE};
 	    cOptions[1] = opt1;
 	    cArgs = "(filename)  [ (type1) (type2) ... ]";
 	    cInstructions = "Writes data to a file. This may mean writing the coordinates of the geometry in a text file or rendering an image of the current view. For data files, the poscar and xyz formats are currently implemented. Note that when the names of elements are written, if the name of the element contains the character '"+FileHandler.ELEM_SEP+"', it and anything following will be ignored when writing (e.g., 'Mg', 'Mg_2', and 'Mg_frozen' are all written as 'Mg'). This is done to allow the user to define groups of atoms which correspond to the same element but are handled separately in ASH. If you want the names of the groups to be different in the output as well, use some other delimiter (e.g., Mg2 or Mg.2). \n"+
