@@ -173,7 +173,7 @@ public class ASH{
 				   K_VZOOM,K_VDIR,
 				   K_PI,K_E,K_VERSION};
 
-    private static final String VERSION = "0.35";
+    private static final String VERSION = "0.4";
     private static final String[] DEFAULT_LAUNCH = {
 	"print \"This is Atomic Structure Handler $"+K_VERSION+"$\"",
 	"print \" \"",
