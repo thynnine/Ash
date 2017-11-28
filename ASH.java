@@ -1137,7 +1137,8 @@ public class ASH{
 		    printMessage("  in cluster  "+particleMap[hit[i]],true);
 		}
 	    }
-	    System.out.print(PROMPT+" ");
+	    // Removed prompt
+	    // System.out.print(PROMPT+" ");
 	}
     }
 
@@ -1342,7 +1343,8 @@ public class ASH{
     public String readCommandLine(String prompt){
 
 	//jline>
-	System.out.print(prompt+" ");
+	// Removed prompt
+	//System.out.print(prompt+" ");
 	try{
 	    String line = con.readLine();
 	    con.getHistory().addToHistory(line);
